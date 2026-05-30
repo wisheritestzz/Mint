@@ -45,23 +45,23 @@ export default function IntroPage() {
                 {mode.badge && <Tag color="red" className="!absolute !top-3 !right-3 !text-[10px] !font-bold !rounded-full">{mode.badge}</Tag>}
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style={{ backgroundColor: `${mode.color}15`, color: mode.color }}>{mode.icon}</div>
-                  <div>
-                    <div className="font-bold text-[#1a1a2e] text-sm sm:text-base leading-tight">{mode.title}</div>
-                    <Text className="!text-xs !text-slate-400">{mode.subtitle}</Text>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-bold text-[#1a1a2e] text-sm sm:text-base leading-tight break-words">{mode.title}</div>
+                    <Text className="!text-xs !text-slate-400 break-words">{mode.subtitle}</Text>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 mb-4 text-xs">
+                <div className="flex items-center gap-3 mb-4 text-xs flex-wrap">
                   <span className="inline-flex items-center gap-1 text-slate-500">
-                    <FileTextOutlined className="text-slate-400" />
+                    <FileTextOutlined className="text-slate-400 flex-shrink-0" />
                     <span className="font-bold text-base" style={{ color: mode.color }}>{mode.questions}</span>{t('intro.questionsUnit')}
                   </span>
                   <span className="inline-flex items-center gap-1 text-slate-500">
-                    <ClockCircleOutlined className="text-slate-400" />{mode.time}{t('intro.time')}
+                    <ClockCircleOutlined className="text-slate-400 flex-shrink-0" />{mode.time}{t('intro.time')}
                   </span>
                 </div>
-                <ul className="space-y-1.5">
+                <ul className="space-y-1.5" style={{ minHeight: '6rem' }}>
                   {mode.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-xs text-slate-500">
+                    <li key={f} className="flex items-start gap-2 text-xs text-slate-500 break-words">
                       <CheckCircleOutlined className="!text-[10px] mt-0.5 flex-shrink-0" style={{ color: mode.color }} />{f}
                     </li>
                   ))}

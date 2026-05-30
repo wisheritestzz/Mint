@@ -6,6 +6,7 @@ export type Pole = 'E' | 'I' | 'S' | 'N' | 'T' | 'F' | 'J' | 'P';
 export interface Question {
   id: number;
   text: string;
+  textEn?: string;
   dimension: Dimension;
   direction: Pole; // 高分倾向哪个极
 }

@@ -29,7 +29,7 @@ const { Title, Text, Paragraph } = Typography;
 export default function ResultPage() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { capture } = useScreenshot();
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +66,7 @@ export default function ResultPage() {
     );
   }
 
-  const meta = getTypeMeta(currentResult.type);
+  const meta = getTypeMeta(currentResult.type, lang);
 
   // ECharts 维度图表配置
   const chartOption = {

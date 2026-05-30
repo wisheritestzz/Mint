@@ -133,7 +133,9 @@ export default function TestPage() {
                 </span>
                 <span className="text-xs text-slate-400">{lang === 'zh' ? `第 ${currentIndex + 1} 题` : `Q${currentIndex + 1}`}</span>
               </div>
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#1a1a2e] leading-relaxed">{currentQ.text}</h2>
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#1a1a2e] leading-relaxed">
+                {lang === 'en' && currentQ.textEn ? currentQ.textEn : currentQ.text}
+              </h2>
             </motion.div>
           </AnimatePresence>
 

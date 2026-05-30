@@ -36,7 +36,7 @@ export default function HomePage() {
     else navigate('/intro');
   };
 
-  const typeMeta = selectedType ? getTypeMeta(selectedType) : null;
+  const typeMeta = selectedType ? getTypeMeta(selectedType, lang) : null;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fafafa]">
@@ -107,7 +107,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 max-w-3xl mx-auto">
             {ALL_16_TYPES.map((type, i) => {
-              const meta = getTypeMeta(type);
+              const meta = getTypeMeta(type, lang);
               return (
                 <motion.button key={type}
                   initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
