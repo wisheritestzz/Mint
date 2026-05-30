@@ -6,7 +6,6 @@ import {
   RightOutlined,
   CloseOutlined,
   AppstoreOutlined,
-  ForwardOutlined,
 } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTestStore } from '../store/testStore';
@@ -88,10 +87,6 @@ export default function TestPage() {
   const currentQ = questions[currentIndex];
   const selectedScore = currentQ ? answers[currentQ.id] : undefined;
   const answeredCount = Object.keys(answers).length;
-  const unansweredIndices: number[] = [];
-  questions.forEach((q, i) => {
-    if (answers[q.id] == null) unansweredIndices.push(i);
-  });
 
   const handleSelect = useCallback(
     (score: LikertLevel) => {
@@ -123,14 +118,6 @@ export default function TestPage() {
     },
     [currentIndex, goTo],
   );
-
-  const handleJumpUnanswered = useCallback(() => {
-    if (unansweredIndices.length === 0) return;
-    // 找当前索引之后最近的一个未答题
-    const nextUnanswered = unansweredIndices.find((i) => i > currentIndex);
-    const target = nextUnanswered ?? unansweredIndices[0];
-    handleGoTo(target);
-  }, [currentIndex, unansweredIndices, handleGoTo]);
 
   const handleFinish = useCallback(() => {
     finishingRef.current = true;
@@ -184,16 +171,6 @@ export default function TestPage() {
                 className={`!text-slate-400 hover:!text-slate-600 ${showNavPanel ? '!text-indigo-500' : ''}`}
               />
             </Tooltip>
-            {unansweredIndices.length > 0 && (
-              <Button
-                size="small"
-                icon={<ForwardOutlined />}
-                onClick={handleJumpUnanswered}
-                className="!rounded-lg !text-xs !text-amber-600 !border-amber-200 hover:!border-amber-400"
-              >
-                跳过未答
-              </Button>
-            )}
             <Text className="!text-xs !text-slate-400 !font-mono">
               {answeredCount}/{questions.length}
             </Text>
@@ -363,7 +340,7 @@ export default function TestPage() {
 
           <div className="flex-1" />
 
-          {allComplete ? (
+          {allComplete && currentIndex === questions.length - 1 ? (
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}

@@ -4,8 +4,17 @@ import { Button, Typography, Modal } from 'antd';
 import { ThunderboltOutlined, SafetyCertificateOutlined, SmileOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useTestStore } from '../store/testStore';
+import { getTypeMeta } from '../logic/constants';
 
 const { Title, Text } = Typography;
+
+// 四大气质分组
+const TEMPERAMENTS = [
+  { name: '分析师', emoji: '🧠', types: ['INTJ', 'INTP', 'ENTJ', 'ENTP'], desc: '理性·战略·创新' },
+  { name: '外交家', emoji: '🌿', types: ['INFJ', 'INFP', 'ENFJ', 'ENFP'], desc: '共情·理想·激励' },
+  { name: '守护者', emoji: '🛡️', types: ['ISTJ', 'ISFJ', 'ESTJ', 'ESFJ'], desc: '务实·可靠·秩序' },
+  { name: '探险家', emoji: '🔥', types: ['ISTP', 'ISFP', 'ESTP', 'ESFP'], desc: '灵活·敏锐·行动' },
+];
 
 const highlights = [
   { icon: <ThunderboltOutlined />, text: '无需登录，即刻测试' },
@@ -124,6 +133,58 @@ export default function HomePage() {
             <span className="bg-slate-100 px-3 py-1.5 rounded-full font-medium text-slate-600">
               3. 查看结果
             </span>
+          </div>
+
+          {/* 16种人格类型图谱 */}
+          <div className="mb-10 w-full max-w-2xl mx-auto">
+            <div className="text-center mb-6">
+              <Title level={4} className="!text-base sm:!text-lg !font-bold !text-[#1a1a2e] !mb-1">
+                16种人格类型图谱
+              </Title>
+              <Text className="!text-xs sm:!text-sm !text-slate-400">
+                了解全部人格类型，看看你属于哪一种
+              </Text>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {TEMPERAMENTS.map((group) => (
+                <motion.div
+                  key={group.name}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4 }}
+                  className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
+                >
+                  <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-50 flex items-center gap-2">
+                    <span className="text-base">{group.emoji}</span>
+                    <span className="font-semibold text-sm text-slate-700">{group.name}</span>
+                    <span className="text-[10px] text-slate-400 ml-auto">{group.desc}</span>
+                  </div>
+                  <div className="p-3 grid grid-cols-2 gap-2">
+                    {group.types.map((type) => {
+                      const meta = getTypeMeta(type);
+                      return (
+                        <div
+                          key={type}
+                          className="flex flex-col items-center py-2 px-2 rounded-xl transition-colors hover:bg-slate-50"
+                        >
+                          <span
+                            className="text-sm font-extrabold tracking-tight mb-0.5"
+                            style={{ color: meta.color }}
+                          >
+                            {type}
+                          </span>
+                          <span className="text-[10px] text-slate-400 text-center leading-tight">
+                            {meta.tag}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {/* 用户评价 */}
