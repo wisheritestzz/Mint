@@ -187,7 +187,7 @@ export default function ResultPage() {
         pdf.addImage(sliceDataUrl, 'PNG', margin, margin, pdfImgW, slicePdfH);
       }
 
-      pdf.save(`MBTI-${currentResult.type}-${currentResult.tag}.pdf`);
+      pdf.save(`MBTI-${currentResult.type}-${meta.tag}.pdf`);
       message.success(t('result.pdfOk'));
     } catch {
       message.error(t('result.pdfFail'));
@@ -196,10 +196,10 @@ export default function ResultPage() {
 
   // 分享
   const handleShare = async () => {
-    const shareText = `${t('result.shareMsg')} ${currentResult.type}（${currentResult.tag}）！${t('result.shareMsg2')}`;
+    const shareText = `${t('result.shareMsg')} ${currentResult.type}（${meta.tag}）！${t('result.shareMsg2')}`;
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'MBTI性格测试', text: shareText, url: window.location.origin });
+        await navigator.share({ title: 'MBTI Personality Test', text: shareText, url: window.location.origin });
       } catch {
         // user cancelled
       }
@@ -240,7 +240,7 @@ export default function ResultPage() {
             {currentResult.type}
           </Title>
           <Text className="!text-lg sm:!text-xl !text-slate-500 !font-medium">
-            {currentResult.tag}
+            {meta.tag}
           </Text>
           <div className="mt-2">
             <Text className="!text-sm !text-slate-400">
@@ -409,7 +409,7 @@ export default function ResultPage() {
                   </Text>
                   <Text className="!text-xs !text-indigo-500 !font-medium">
                     {getPoleLabel(ds.dominant, lang)}
-                    {ds.ambiguous ? ' (倾向不明显)' : ''}
+                    {ds.ambiguous ? ` (${t('result.poleAmbiguous')})` : ''}
                   </Text>
                 </div>
                 <Paragraph className="!text-xs sm:!text-sm !text-slate-500 !leading-relaxed !mb-0">
