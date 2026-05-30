@@ -8,25 +8,33 @@ export const DIMENSION_POLES: Record<Dimension, { left: Pole; right: Pole }> = {
   JP: { left: 'J', right: 'P' },
 };
 
-// 维度中文名
+// 维度名
 export const DIMENSION_LABELS: Record<Dimension, string> = {
-  EI: '精力来源',
-  SN: '信息获取',
-  TF: '决策方式',
-  JP: '生活态度',
+  EI: '精力来源', SN: '信息获取', TF: '决策方式', JP: '生活态度',
+};
+export const DIMENSION_LABELS_EN: Record<Dimension, string> = {
+  EI: 'Energy', SN: 'Information', TF: 'Decisions', JP: 'Lifestyle',
 };
 
-// 极向中文
+// 极向名
 export const POLE_LABELS: Record<Pole, string> = {
-  E: '外倾 Extraversion',
-  I: '内倾 Introversion',
-  S: '实感 Sensing',
-  N: '直觉 Intuition',
-  T: '思考 Thinking',
-  F: '情感 Feeling',
-  J: '判断 Judging',
-  P: '感知 Perceiving',
+  E: '外倾 Extraversion', I: '内倾 Introversion', S: '实感 Sensing', N: '直觉 Intuition',
+  T: '思考 Thinking', F: '情感 Feeling', J: '判断 Judging', P: '感知 Perceiving',
 };
+export const POLE_LABELS_EN: Record<Pole, string> = {
+  E: 'Extraversion', I: 'Introversion', S: 'Sensing', N: 'Intuition',
+  T: 'Thinking', F: 'Feeling', J: 'Judging', P: 'Perceiving',
+};
+
+export function getDimLabel(dim: Dimension, lang?: string): string {
+  return lang === 'en' ? DIMENSION_LABELS_EN[dim] : DIMENSION_LABELS[dim];
+}
+export function getPoleLabel(pole: Pole, lang?: string): string {
+  return lang === 'en' ? POLE_LABELS_EN[pole] : POLE_LABELS[pole];
+}
+export function getPoleShort(pole: Pole): string {
+  return pole; // E, I, S, N, T, F, J, P - same in both languages
+}
 
 // MBTI 类型元数据
 export interface TypeMeta {
@@ -301,6 +309,30 @@ export const DIMENSION_INTERPRETATION: Record<Dimension, Record<string, string>>
     P: '你倾向于灵活、开放、顺其自然的生活方式。你喜欢保留选择的空间，享受过程中的探索和发现。你适应当下、乐于接受变化，认为截止日期更多是一种参考而非铁律。',
   },
 };
+
+export const DIMENSION_INTERPRETATION_EN: Record<Dimension, Record<string, string>> = {
+  EI: {
+    E: 'You draw energy from the external world and social interactions. Being with people energizes and fulfills you. You enjoy sharing ideas, think more actively in group discussions, tend to act before reflecting, and maintain a wide range of interests and social connections.',
+    I: 'You draw energy from your inner world and solitude. Quiet environments allow you to think deeply. You value the quality of inner experience over external stimulation, tend to reflect before acting, and prefer exploring a few interests in great depth.',
+  },
+  SN: {
+    S: 'You focus on concrete, factual information and trust what you can see. You value details and practical experience, excel at applying known methods to current problems, prefer step-by-step approaches, and show less interest in abstract theories.',
+    N: 'You focus on overall patterns and future possibilities. You enjoy exploring new ideas and connecting disparate information, have a strong interest in abstract concepts and theoretical discussions, and care more about "what could be" than "what is."',
+  },
+  TF: {
+    T: 'You make decisions based on logic and objective analysis. You value fairness and consistency, excel at weighing pros and cons to find optimal solutions. You trust in truth and principles, placing objective standards above personal feelings in decision-making.',
+    F: 'You make decisions considering values and impact on people. You value harmony and empathy, excel at seeing issues from different perspectives. You believe in the value of emotions and carefully consider the feelings and needs of those involved.',
+  },
+  JP: {
+    J: 'You prefer a planned, organized lifestyle. You like clear schedules and explicit rules, finding satisfaction in completing tasks. You focus on efficiency and results, preferring to make decisions quickly to reduce uncertainty.',
+    P: 'You prefer a flexible, open, go-with-the-flow lifestyle. You like keeping options open and enjoy the process of exploration and discovery. You adapt easily, embrace change, and view deadlines more as guidelines than absolutes.',
+  },
+};
+
+export function getDimInterpretation(dim: Dimension, pole: string, lang?: string): string {
+  const source = lang === 'en' ? DIMENSION_INTERPRETATION_EN : DIMENSION_INTERPRETATION;
+  return source[dim]?.[pole] || '';
+}
 
 // 所有MBTI类型列表
 export const ALL_TYPES = Object.keys(TYPE_DATA);

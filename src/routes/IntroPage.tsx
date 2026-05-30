@@ -36,18 +36,18 @@ export default function IntroPage() {
           <Text className="!text-sm !text-slate-400">{t('intro.subtitle')}</Text>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 items-stretch">
           {MODES.map((mode, i) => (
-            <motion.div key={mode.key} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * i }}>
+            <motion.div key={mode.key} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * i }} className="flex">
               <Card hoverable onClick={() => setSelected(mode.key)}
-                className={`!rounded-2xl !border-2 !transition-all !cursor-pointer ${selected === mode.key ? '!border-indigo-500 !shadow-lg !shadow-indigo-100 !ring-2 !ring-indigo-100' : '!border-slate-200 !shadow-sm hover:!shadow-md'}`}
-                styles={{ body: { padding: '20px' } }}>
+                className={`!rounded-2xl !border-2 !transition-all !cursor-pointer !flex !flex-col !flex-1 ${selected === mode.key ? '!border-indigo-500 !shadow-lg !shadow-indigo-100 !ring-2 !ring-indigo-100' : '!border-slate-200 !shadow-sm hover:!shadow-md'}`}
+                styles={{ body: { padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' } }}>
                 {mode.badge && <Tag color="red" className="!absolute !top-3 !right-3 !text-[10px] !font-bold !rounded-full">{mode.badge}</Tag>}
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style={{ backgroundColor: `${mode.color}15`, color: mode.color }}>{mode.icon}</div>
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0" style={{ backgroundColor: `${mode.color}15`, color: mode.color }}>{mode.icon}</div>
                   <div className="min-w-0 flex-1">
-                    <div className="font-bold text-[#1a1a2e] text-sm sm:text-base leading-tight break-words">{mode.title}</div>
-                    <Text className="!text-xs !text-slate-400 break-words">{mode.subtitle}</Text>
+                    <div className="font-bold text-[#1a1a2e] text-sm sm:text-base leading-snug">{mode.title}</div>
+                    <Text className="!text-xs !text-slate-400">{mode.subtitle}</Text>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 mb-4 text-xs flex-wrap">
@@ -59,9 +59,9 @@ export default function IntroPage() {
                     <ClockCircleOutlined className="text-slate-400 flex-shrink-0" />{mode.time}{t('intro.time')}
                   </span>
                 </div>
-                <ul className="space-y-1.5" style={{ minHeight: '6rem' }}>
+                <ul className="space-y-1.5 flex-1">
                   {mode.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-xs text-slate-500 break-words">
+                    <li key={f} className="flex items-start gap-2 text-xs text-slate-500">
                       <CheckCircleOutlined className="!text-[10px] mt-0.5 flex-shrink-0" style={{ color: mode.color }} />{f}
                     </li>
                   ))}

@@ -17,9 +17,9 @@ import { useIsMobile } from '../hooks/useResponsive';
 import { useScreenshot } from '../hooks/useScreenshot';
 import { useI18n } from '../i18n/context';
 import {
-  DIMENSION_LABELS,
-  POLE_LABELS,
-  DIMENSION_INTERPRETATION,
+  getDimLabel,
+  getPoleLabel,
+  getDimInterpretation,
   getTypeMeta,
 } from '../logic/constants';
 import { jsPDF } from 'jspdf';
@@ -75,7 +75,7 @@ export default function ResultPage() {
     yAxis: {
       type: 'category',
       data: currentResult.dimensionScores.map(
-        (ds) => DIMENSION_LABELS[ds.dimension],
+        (ds) => getDimLabel(ds.dimension, lang),
       ),
       axisLine: { show: false },
       axisTick: { show: false },
@@ -86,7 +86,7 @@ export default function ResultPage() {
         type: 'bar',
         data: currentResult.dimensionScores.map((ds) => ({
           value: ds.leftScore,
-          name: POLE_LABELS[ds.leftPole],
+          name: getPoleLabel(ds.leftPole, lang),
         })),
         itemStyle: {
           color: currentResult.color,
@@ -105,7 +105,7 @@ export default function ResultPage() {
         type: 'bar',
         data: currentResult.dimensionScores.map((ds) => ({
           value: ds.rightScore,
-          name: POLE_LABELS[ds.rightPole],
+          name: getPoleLabel(ds.rightPole, lang),
         })),
         itemStyle: {
           color: '#cbd5e1',
@@ -311,17 +311,17 @@ export default function ResultPage() {
                   <div key={ds.dimension}>
                     <div className="flex items-center justify-between mb-1">
                       <Text className="!text-xs !font-medium !text-slate-600">
-                        {DIMENSION_LABELS[ds.dimension]}
+                        {getDimLabel(ds.dimension, lang)}
                       </Text>
                       <Text className={`!text-xs !font-medium ${ds.ambiguous ? '!text-amber-500' : '!text-emerald-600'}`}>
-                        {POLE_LABELS[maxPole].split(' ')[0]} {t('result.poleLean')}
+                        {getPoleLabel(maxPole, lang).split(' ')[0]} {t('result.poleLean')}
                         {ds.ambiguous ? ` (${t('result.poleAmbiguous')})` : ''}
                         <span className="ml-1 text-slate-400">{t('result.scoreDiff')}{margin}{t('result.scoreUnit')}</span>
                       </Text>
                     </div>
                     <div className="flex items-center gap-2">
                       <Text className="!text-xs !text-slate-400 !w-6 text-right !flex-shrink-0">
-                        {POLE_LABELS[ds.leftPole].split(' ')[0]}
+                        {getPoleLabel(ds.leftPole, lang).split(' ')[0]}
                       </Text>
                       <div className="flex-1 h-4 bg-slate-100 rounded-full overflow-hidden flex">
                         <div
@@ -346,7 +346,7 @@ export default function ResultPage() {
                         />
                       </div>
                       <Text className="!text-xs !text-slate-400 !w-6 !flex-shrink-0">
-                        {POLE_LABELS[ds.rightPole].split(' ')[0]}
+                        {getPoleLabel(ds.rightPole, lang).split(' ')[0]}
                       </Text>
                     </div>
                     <div className="flex justify-between mt-1">
@@ -405,15 +405,15 @@ export default function ResultPage() {
               <div key={ds.dimension} className="mb-4 last:mb-0">
                 <div className="flex items-center gap-2 mb-1.5">
                   <Text className="!font-semibold !text-sm !text-[#1a1a2e]">
-                    {DIMENSION_LABELS[ds.dimension]}
+                    {getDimLabel(ds.dimension, lang)}
                   </Text>
                   <Text className="!text-xs !text-indigo-500 !font-medium">
-                    {POLE_LABELS[ds.dominant]}
+                    {getPoleLabel(ds.dominant, lang)}
                     {ds.ambiguous ? ' (倾向不明显)' : ''}
                   </Text>
                 </div>
                 <Paragraph className="!text-xs sm:!text-sm !text-slate-500 !leading-relaxed !mb-0">
-                  {DIMENSION_INTERPRETATION[ds.dimension][ds.dominant]}
+                  {getDimInterpretation(ds.dimension, ds.dominant, lang)}
                 </Paragraph>
                 {currentResult.dimensionScores.indexOf(ds) < 3 && (
                   <Divider className="!my-3" />
