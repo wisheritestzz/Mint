@@ -13,7 +13,8 @@ interface TestState {
   hasResumed: boolean;
 
   // Actions
-  initTest: (resume?: boolean) => void;
+  initTest: (opts?: { resume?: boolean; questionCount?: number }) => void;
+  questionCount: number;
   setAnswer: (questionId: number, score: LikertLevel) => void;
   next: () => void;
   prev: () => void;
@@ -34,18 +35,21 @@ export const useTestStore = create<TestState>((set, get) => ({
   answers: {},
   startTime: 0,
   hasResumed: false,
+  questionCount: 50,
 
-  initTest: (resume = false) => {
+  initTest: (opts) => {
     const state = get();
-    if (resume && state.loadFromCache()) return;
+    if (opts?.resume && state.loadFromCache()) return;
 
-    const shuffled = shuffleQuestions();
+    const count = opts?.questionCount || 50;
+    const shuffled = shuffleQuestions(count);
     set({
       questions: shuffled,
       currentIndex: 0,
       answers: {},
       startTime: Date.now(),
       hasResumed: false,
+      questionCount: count,
     });
   },
 

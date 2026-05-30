@@ -133,7 +133,7 @@ export default function TestPage() {
   // 初始化
   useEffect(() => {
     if (finishingRef.current) return;
-    if (questions.length === 0) initTest(false);
+    if (questions.length === 0) initTest();
   }, [questions.length, initTest]);
 
   if (questions.length === 0 || !currentQ) {

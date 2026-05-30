@@ -210,7 +210,7 @@ export default function ResultPage() {
   // 重新测试
   const handleRetry = () => {
     clearResult();
-    initTest(false);
+    initTest();
     navigate('/test');
   };
 

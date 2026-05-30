@@ -116,6 +116,54 @@ const allQuestions: Question[] = [
   { id: 98, text: '在旅行中迷路对你来说是一种有趣的探索，而非令人焦虑的意外。', dimension: 'JP', direction: 'P' },
   { id: 99, text: '你经常在截止日期前才开始认真投入，并且总是能在最后关头完成。', dimension: 'JP', direction: 'P' },
   { id: 100, text: '你认为过度规划会扼杀创造力和生活的意外之喜。', dimension: 'JP', direction: 'P' },
+
+  // ===== 补充: EI (10题) =====
+  { id: 101, text: '你发现自己经常主动和陌生人开启对话。', dimension: 'EI', direction: 'E' },
+  { id: 102, text: '在咖啡厅工作时，周围有人反而让你更加专注。', dimension: 'EI', direction: 'E' },
+  { id: 103, text: '你在表达想法时倾向于边说边组织，而不是先想好再说。', dimension: 'EI', direction: 'E' },
+  { id: 104, text: '网络社交让你感到充实，你花很多时间与人线上互动。', dimension: 'EI', direction: 'E' },
+  { id: 105, text: '收到消息后你会尽快回复，不喜欢延迟沟通。', dimension: 'EI', direction: 'E' },
+  { id: 106, text: '独自完成一项大工程后，你并不太需要与人分享庆祝。', dimension: 'EI', direction: 'I' },
+  { id: 107, text: '你对社交媒体的使用比较克制，更偏好一对一的聊天。', dimension: 'EI', direction: 'I' },
+  { id: 108, text: '在接受邀请前，你通常会犹豫要不要去、去了待多久。', dimension: 'EI', direction: 'I' },
+  { id: 109, text: '写日记或写博客是你整理内心想法的重要方式。', dimension: 'EI', direction: 'I' },
+  { id: 110, text: '比起在会议上即兴发言，你更愿意提交一份深思熟虑的文档。', dimension: 'EI', direction: 'I' },
+
+  // ===== 补充: SN (10题) =====
+  { id: 111, text: '你在阅读说明书之前，会先凭直觉动手尝试。', dimension: 'SN', direction: 'N' },
+  { id: 112, text: '比起现有的成熟方案，你总是被新的可能性所吸引。', dimension: 'SN', direction: 'N' },
+  { id: 113, text: '你看电影时更关注主题和隐喻，而非剧情的具体细节。', dimension: 'SN', direction: 'N' },
+  { id: 114, text: '你更相信数据和报表，对灵感/顿悟持保留态度。', dimension: 'SN', direction: 'S' },
+  { id: 115, text: '做菜时你严格按照食谱，不会随意调整配料比例。', dimension: 'SN', direction: 'S' },
+  { id: 116, text: '你更信任有多年经验的老手，而非嘴上说着"新思路"的新人。', dimension: 'SN', direction: 'S' },
+  { id: 117, text: '你经常想到一个创意然后马上就去做，不会先调研可行性。', dimension: 'SN', direction: 'N' },
+  { id: 118, text: '你对抽象艺术的理解更多来自直观感受而非理性分析。', dimension: 'SN', direction: 'N' },
+  { id: 119, text: '你喜欢用拍照或录音来记录生活中的具体瞬间。', dimension: 'SN', direction: 'S' },
+  { id: 120, text: '复述一件事情时，你会尽可能精确地还原所有细节。', dimension: 'SN', direction: 'S' },
+
+  // ===== 补充: TF (10题) =====
+  { id: 121, text: '朋友向你倾诉烦恼时，你的第一反应是帮他分析问题症结。', dimension: 'TF', direction: 'T' },
+  { id: 122, text: '你很难理解为什么有人会因为"不好意思"而不去争取应得的权益。', dimension: 'TF', direction: 'T' },
+  { id: 123, text: '你对人与人的情绪流动很敏感，能感觉到空气中微妙的气氛变化。', dimension: 'TF', direction: 'F' },
+  { id: 124, text: '团建活动中有人被冷落时，你会主动去关心那个人。', dimension: 'TF', direction: 'F' },
+  { id: 125, text: '面对一笔不合理的收费，你会据理力争，不论对方态度如何。', dimension: 'TF', direction: 'T' },
+  { id: 126, text: '看了感人电影后，你常常眼眶湿润且不觉得难为情。', dimension: 'TF', direction: 'F' },
+  { id: 127, text: '即便团队方案不是最优，但如果团队很用心你也不忍推翻。', dimension: 'TF', direction: 'F' },
+  { id: 128, text: '你在做决策时会画决策树，而不是凭内心的感觉来选。', dimension: 'TF', direction: 'T' },
+  { id: 129, text: '你买礼物时会花很多心思揣摩对方真正喜欢什么。', dimension: 'TF', direction: 'F' },
+  { id: 130, text: '当朋友做出不理性的选择时，你会忍不住指出逻辑漏洞。', dimension: 'TF', direction: 'T' },
+
+  // ===== 补充: JP (10题) =====
+  { id: 131, text: '即使到了周末，你也会大致规划好一天要做什么。', dimension: 'JP', direction: 'J' },
+  { id: 132, text: '朋友临时约你今晚吃饭，你很乐意调整原有的安排。', dimension: 'JP', direction: 'P' },
+  { id: 133, text: '你在开始一项工作前会先把桌面整理干净。', dimension: 'JP', direction: 'J' },
+  { id: 134, text: '你买东西很少货比三家，看中就下手不等更好的。', dimension: 'JP', direction: 'P' },
+  { id: 135, text: '你不知道周末要干什么，但相信到时候自然会有安排。', dimension: 'JP', direction: 'P' },
+  { id: 136, text: '你把所有重要的日子（生日、纪念日）都记在日历上。', dimension: 'JP', direction: 'J' },
+  { id: 137, text: '你讨厌被催促，更喜欢按照自己的节奏来做事。', dimension: 'JP', direction: 'P' },
+  { id: 138, text: '你在开始新工作前，会要求所有流程和规则都明确清楚。', dimension: 'JP', direction: 'J' },
+  { id: 139, text: '你的阅读方式是跳着读、看感兴趣的部分，而非从头到尾。', dimension: 'JP', direction: 'P' },
+  { id: 140, text: '三个月的旅行计划对你来说太遥远了，你更倾向于说走就走。', dimension: 'JP', direction: 'P' },
 ];
 
 export default allQuestions;
@@ -155,6 +203,6 @@ export function pickQuestions(count: number = 50): Question[] {
 }
 
 // 兼容旧 API: 返回50题
-export function shuffleQuestions(): Question[] {
-  return pickQuestions(50);
+export function shuffleQuestions(count: number = 50): Question[] {
+  return pickQuestions(count);
 }
