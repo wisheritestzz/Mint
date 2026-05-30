@@ -29,7 +29,7 @@ export default function ResultPage() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { t, lang } = useI18n();
-  const resultRef = useRef<HTMLDivElement>(null);
+  const printRef = useRef<HTMLDivElement>(null);
 
   const currentResult = useResultStore((s) => s.currentResult);
   const history = useResultStore((s) => s.history);
@@ -123,10 +123,10 @@ export default function ResultPage() {
 
   // 截图（动态加载 html2canvas）
   const handleScreenshot = async () => {
-    if (!resultRef.current) return;
+    if (!printRef.current) return;
     try {
       const { default: html2canvas } = await import('html2canvas');
-      const canvas = await html2canvas(resultRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const canvas = await html2canvas(printRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
       const dataUrl = canvas.toDataURL('image/png');
       const link = document.createElement('a');
       link.href = dataUrl;
@@ -140,13 +140,13 @@ export default function ResultPage() {
 
   // PDF 下载（动态加载 html2canvas + jsPDF）
   const handlePDF = async () => {
-    if (!resultRef.current) return;
+    if (!printRef.current) return;
     try {
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
         import('html2canvas'),
         import('jspdf'),
       ]);
-      const canvas = await html2canvas(resultRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const canvas = await html2canvas(printRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
       const dataUrl = canvas.toDataURL('image/png');
 
       // 加载截图到 Image 对象以获取原始尺寸
@@ -222,7 +222,8 @@ export default function ResultPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] py-8 sm:py-12 px-4">
-      <div className="max-w-2xl mx-auto" ref={resultRef}>
+      {/* 可打印区域：仅包含结果内容 */}
+      <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-sm border border-slate-100 p-6 sm:p-8 mb-8" ref={printRef}>
         {/* 核心结果渐显 */}
         <motion.div
           initial={{ opacity: 0, filter: 'blur(12px)' }}
@@ -428,7 +429,10 @@ export default function ResultPage() {
             ))}
           </Card>
         </motion.div>
+      </div>{/* 打印区域结束 */}
 
+      {/* 反馈 + 操作按钮（不包含在截图/PDF中） */}
+      <div className="max-w-2xl mx-auto">
         {/* 反馈入口 */}
         {showFeedback && (
           <motion.div
