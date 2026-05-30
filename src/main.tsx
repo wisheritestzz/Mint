@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
+
+const Router = import.meta.env.PROD ? HashRouter : BrowserRouter;
 import { ConfigProvider, App as AntApp } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import { themeConfig } from './styles/theme';
@@ -11,9 +13,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ConfigProvider theme={themeConfig} locale={zhCN}>
       <AntApp>
-        <BrowserRouter>
+        <Router>
           <App />
-        </BrowserRouter>
+        </Router>
       </AntApp>
     </ConfigProvider>
   </StrictMode>,
