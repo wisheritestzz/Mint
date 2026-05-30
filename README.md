@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="https://你的用户名.github.io/mbti-qtest/"><b>🔗 立即体验在线版</b></a>
+  <a href="https://wisheritestzz.github.io/Mint/"><b>🔗 立即体验在线版</b></a>
 </p>
 
 ---
@@ -43,8 +43,8 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/你的用户名/mbti-qtest.git
-cd mbti-qtest
+git clone https://github.com/wisheritestzz/Mint.git
+cd Mint
 
 # 安装依赖
 npm install
