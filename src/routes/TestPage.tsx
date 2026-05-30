@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Progress, Button, Typography, Modal } from 'antd';
 import {
@@ -47,9 +47,10 @@ export default function TestPage() {
 
   const computeResult = useResultStore((s) => s.computeResult);
 
-  const [direction, setDirection] = useState(1); // 1=forward, -1=backward
+  const [direction, setDirection] = useState(1);
   const [showExitModal, setShowExitModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const finishingRef = useRef(false);
 
   // 自动完成检测
   useEffect(() => {
@@ -85,18 +86,19 @@ export default function TestPage() {
   }, [currentIndex, prev]);
 
   const handleFinish = useCallback(() => {
+    finishingRef.current = true;
     const answerList: Answer[] = Object.entries(answers).map(([id, score]) => ({
       questionId: Number(id),
       score,
     }));
     computeResult(answerList);
     clearCache();
-    setShowCompleteModal(false);
     navigate('/result');
   }, [answers, computeResult, clearCache, navigate]);
 
-  // 无题目时回首页
+  // 无题目时：如果正在提交则跳过，否则初始化
   useEffect(() => {
+    if (finishingRef.current) return;
     if (questions.length === 0) {
       initTest(false);
     }
