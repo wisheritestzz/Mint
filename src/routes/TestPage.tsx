@@ -340,22 +340,48 @@ export default function TestPage() {
 
           <div className="flex-1" />
 
-          {allComplete && currentIndex === questions.length - 1 ? (
+          {/* 三种底部按钮状态 */}
+          {allComplete ? (
+            /* 全部答完 → 查看结果（仅最后一题显示，否则继续导航） */
+            currentIndex === questions.length - 1 ? (
+              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
+                <Button
+                  type="primary"
+                  size={isMobile ? 'middle' : 'large'}
+                  onClick={() => setShowCompleteModal(true)}
+                  className="!rounded-xl !font-bold !shadow-lg !shadow-indigo-300/50 !px-6"
+                  style={{ background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none' }}
+                >
+                  查看结果 ✨
+                </Button>
+              </motion.div>
+            ) : (
+              <Button
+                type={selectedScore ? 'primary' : 'default'}
+                size={isMobile ? 'middle' : 'large'}
+                icon={<RightOutlined />}
+                iconPosition="end"
+                onClick={handleNext}
+                className={`!rounded-xl !font-medium flex-shrink-0 ${selectedScore ? '!shadow-md' : ''}`}
+                style={selectedScore ? { background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none' } : undefined}
+              >
+                下一题
+              </Button>
+            )
+          ) : currentIndex === questions.length - 1 ? (
+            /* 最后一题但有未答题 → 引导补充 */
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2"
             >
               <Button
-                type="primary"
                 size={isMobile ? 'middle' : 'large'}
-                onClick={() => setShowCompleteModal(true)}
-                className="!rounded-xl !font-bold !shadow-lg !shadow-indigo-300/50 !px-6"
-                style={{
-                  background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-                  border: 'none',
-                }}
+                onClick={() => setShowNavPanel(true)}
+                icon={<AppstoreOutlined />}
+                className="!rounded-xl !font-medium !text-amber-600 !border-amber-300 hover:!border-amber-500 !bg-amber-50 flex-shrink-0"
               >
-                查看结果 ✨
+                {answeredCount}/{questions.length} 已答 · 补完未答
               </Button>
             </motion.div>
           ) : (
@@ -365,18 +391,8 @@ export default function TestPage() {
               icon={<RightOutlined />}
               iconPosition="end"
               onClick={handleNext}
-              disabled={currentIndex === questions.length - 1}
-              className={`!rounded-xl !font-medium flex-shrink-0 ${
-                selectedScore ? '!shadow-md' : ''
-              }`}
-              style={
-                selectedScore
-                  ? {
-                      background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-                      border: 'none',
-                    }
-                  : undefined
-              }
+              className={`!rounded-xl !font-medium flex-shrink-0 ${selectedScore ? '!shadow-md' : ''}`}
+              style={selectedScore ? { background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none' } : undefined}
             >
               下一题
             </Button>
