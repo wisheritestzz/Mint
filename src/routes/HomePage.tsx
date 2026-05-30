@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography, Modal } from 'antd';
+import { Button, Typography, Modal, Divider } from 'antd';
 import { ThunderboltOutlined, SafetyCertificateOutlined, SmileOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import { useTestStore } from '../store/testStore';
@@ -8,23 +8,17 @@ import { getTypeMeta } from '../logic/constants';
 
 const { Title, Text } = Typography;
 
-// 四大气质分组
-const TEMPERAMENTS = [
-  { name: '分析师', emoji: '🧠', types: ['INTJ', 'INTP', 'ENTJ', 'ENTP'], desc: '理性·战略·创新' },
-  { name: '外交家', emoji: '🌿', types: ['INFJ', 'INFP', 'ENFJ', 'ENFP'], desc: '共情·理想·激励' },
-  { name: '守护者', emoji: '🛡️', types: ['ISTJ', 'ISFJ', 'ESTJ', 'ESFJ'], desc: '务实·可靠·秩序' },
-  { name: '探险家', emoji: '🔥', types: ['ISTP', 'ISFP', 'ESTP', 'ESFP'], desc: '灵活·敏锐·行动' },
+const ALL_16_TYPES = [
+  'INTJ', 'INTP', 'ENTJ', 'ENTP',
+  'INFJ', 'INFP', 'ENFJ', 'ENFP',
+  'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
+  'ISTP', 'ISFP', 'ESTP', 'ESFP',
 ];
 
 const highlights = [
-  { icon: <ThunderboltOutlined />, text: '无需登录，即刻测试' },
-  { icon: <SafetyCertificateOutlined />, text: '科学题库，精准评估' },
-  { icon: <SmileOutlined />, text: '简洁高效，体验至上' },
-];
-
-const testimonials = [
-  '"测试结果太准了！完全符合我的性格特点"',
-  '"做了很多MBTI测试，这是我体验最好的一次"',
+  { icon: <ThunderboltOutlined />, text: '无需登录' },
+  { icon: <SafetyCertificateOutlined />, text: '科学精准' },
+  { icon: <SmileOutlined />, text: '极致体验' },
 ];
 
 export default function HomePage() {
@@ -36,176 +30,108 @@ export default function HomePage() {
   const [showResumeModal, setShowResumeModal] = useState(false);
 
   const handleStart = () => {
-    if (hasValidCache()) {
-      setShowResumeModal(true);
-    } else {
-      navigate('/intro');
-    }
-  };
-
-  const handleResume = () => {
-    loadFromCache();
-    setShowResumeModal(false);
-    navigate('/test');
-  };
-
-  const handleNewTest = () => {
-    clearCache();
-    setShowResumeModal(false);
-    navigate('/intro');
+    if (hasValidCache()) setShowResumeModal(true);
+    else navigate('/intro');
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Hero Section */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto w-full py-12 sm:py-16 lg:py-20">
+    <div className="min-h-screen flex flex-col bg-[#fafafa]">
+      <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        {/* ====== Hero ====== */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 0.5 }}
           className="text-center"
         >
-          {/* Logo / Icon */}
-          <div className="mb-6 sm:mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br from-indigo-400 to-indigo-600 shadow-lg shadow-indigo-200">
-              <span className="text-3xl sm:text-4xl text-white font-bold tracking-tighter">
-                MB
-              </span>
-            </div>
+          {/* 简洁图标 */}
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-indigo-400 to-indigo-600 shadow-lg shadow-indigo-200/50 mb-6">
+            <span className="text-2xl sm:text-3xl text-white font-extrabold tracking-tighter">MB</span>
           </div>
 
-          {/* 主标题 */}
-          <Title
-            level={2}
-            className="!text-2xl sm:!text-3xl lg:!text-4xl !font-extrabold !text-[#1a1a2e] !mb-3"
-          >
+          <Title className="!text-2xl sm:!text-3xl !font-extrabold !text-[#1a1a2e] !mb-2 !tracking-tight">
             MBTI 性格测试
           </Title>
-          <Text className="!text-sm sm:!text-base lg:!text-lg !text-slate-500 block max-w-md mx-auto !mb-8">
-            基于荣格心理学理论，科学评估你的性格类型
-            <br className="hidden sm:block" />
-            50道精选题目，带你发现真实的自己
+          <Text className="!text-sm sm:!text-base !text-slate-400 block max-w-sm mx-auto !mb-7">
+            基于荣格心理学 · 100题科学题库 · 精准人格分析
           </Text>
 
-          {/* CTA 按钮 */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            className="mb-8"
-          >
+          {/* CTA */}
+          <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="mb-10">
             <Button
               type="primary"
               size="large"
               onClick={handleStart}
-              className="!h-14 sm:!h-16 !px-10 sm:!px-16 !text-lg sm:!text-xl !font-bold !rounded-2xl !shadow-lg !shadow-indigo-300/50 hover:!shadow-xl hover:!shadow-indigo-400/60"
-              style={{
-                background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-                border: 'none',
-              }}
+              className="!h-14 sm:!h-16 !px-12 sm:!px-16 !text-lg !font-bold !rounded-2xl !shadow-lg !shadow-indigo-300/30"
+              style={{ background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none' }}
             >
               开始测试
             </Button>
           </motion.div>
 
-          {/* 核心优势 */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-10">
+          {/* 三要素 + 流程 合一行 */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-xs sm:text-sm text-slate-400 mb-12">
             {highlights.map((h) => (
-              <div
-                key={h.text}
-                className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/80 backdrop-blur border border-slate-100 shadow-sm"
-              >
-                <span className="text-indigo-500 text-lg">{h.icon}</span>
-                <span className="text-sm text-slate-600 font-medium">{h.text}</span>
-              </div>
+              <span key={h.text} className="inline-flex items-center gap-1.5">
+                <span className="text-indigo-400">{h.icon}</span>
+                <span className="text-slate-500 font-medium">{h.text}</span>
+              </span>
             ))}
-          </div>
-
-          {/* 流程说明 */}
-          <div className="flex items-center justify-center gap-2 sm:gap-4 text-sm text-slate-400 mb-10">
-            <span className="bg-slate-100 px-3 py-1.5 rounded-full font-medium text-slate-600">
-              1. 点击开始
-            </span>
-            <span className="text-slate-300">→</span>
-            <span className="bg-slate-100 px-3 py-1.5 rounded-full font-medium text-slate-600">
-              2. 完成答题
-            </span>
-            <span className="text-slate-300">→</span>
-            <span className="bg-slate-100 px-3 py-1.5 rounded-full font-medium text-slate-600">
-              3. 查看结果
+            <span className="text-slate-300 hidden sm:inline">|</span>
+            <span className="text-slate-400">
+              <span className="text-slate-500 font-medium">1.</span> 开始
+              <span className="mx-1.5 text-slate-300">→</span>
+              <span className="text-slate-500 font-medium">2.</span> 答题
+              <span className="mx-1.5 text-slate-300">→</span>
+              <span className="text-slate-500 font-medium">3.</span> 结果
             </span>
           </div>
+        </motion.div>
 
-          {/* 16种人格类型图谱 */}
-          <div className="mb-10 w-full max-w-2xl mx-auto">
-            <div className="text-center mb-6">
-              <Title level={4} className="!text-base sm:!text-lg !font-bold !text-[#1a1a2e] !mb-1">
-                16种人格类型图谱
-              </Title>
-              <Text className="!text-xs sm:!text-sm !text-slate-400">
-                了解全部人格类型，看看你属于哪一种
-              </Text>
-            </div>
+        {/* ====== 16型图谱 ====== */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="text-center"
+        >
+          <Divider className="!my-6">
+            <Text className="!text-xs !text-slate-300 !font-medium !uppercase !tracking-wider">
+              人格类型图谱
+            </Text>
+          </Divider>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {TEMPERAMENTS.map((group) => (
+          {/* 4列桌面 / 2列手机 */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 max-w-3xl mx-auto">
+            {ALL_16_TYPES.map((type, i) => {
+              const meta = getTypeMeta(type);
+              return (
                 <motion.div
-                  key={group.name}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4 }}
-                  className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
+                  key={type}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 + i * 0.03 }}
+                  className="group relative rounded-xl py-3 px-2 cursor-default transition-all hover:scale-[1.03] hover:shadow-md hover:z-10"
+                  style={{ backgroundColor: `${meta.color}08` }}
                 >
-                  <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-50 flex items-center gap-2">
-                    <span className="text-base">{group.emoji}</span>
-                    <span className="font-semibold text-sm text-slate-700">{group.name}</span>
-                    <span className="text-[10px] text-slate-400 ml-auto">{group.desc}</span>
-                  </div>
-                  <div className="p-3 grid grid-cols-2 gap-2">
-                    {group.types.map((type) => {
-                      const meta = getTypeMeta(type);
-                      return (
-                        <div
-                          key={type}
-                          className="flex flex-col items-center py-2 px-2 rounded-xl transition-colors hover:bg-slate-50"
-                        >
-                          <span
-                            className="text-sm font-extrabold tracking-tight mb-0.5"
-                            style={{ color: meta.color }}
-                          >
-                            {type}
-                          </span>
-                          <span className="text-[10px] text-slate-400 text-center leading-tight">
-                            {meta.tag}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <span
+                    className="block text-sm sm:text-base font-extrabold tracking-tight transition-colors"
+                    style={{ color: meta.color }}
+                  >
+                    {type}
+                  </span>
+                  <span className="block text-[10px] sm:text-xs text-slate-400 mt-0.5 leading-tight group-hover:text-slate-600 transition-colors">
+                    {meta.tag}
+                  </span>
                 </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* 用户评价 */}
-          <div className="space-y-2 mb-12">
-            {testimonials.map((t, i) => (
-              <motion.p
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + i * 0.2 }}
-                className="text-xs sm:text-sm text-slate-400 italic"
-              >
-                {t}
-              </motion.p>
-            ))}
+              );
+            })}
           </div>
         </motion.div>
       </main>
 
       {/* Footer */}
-      <footer className="text-center py-6 px-4 border-t border-slate-100">
+      <footer className="text-center py-5 px-4 border-t border-slate-100 bg-white/50">
         <Text className="!text-xs !text-slate-400">
           本测试不收集任何个人信息，测试数据仅存储在您的浏览器中
         </Text>
@@ -227,15 +153,15 @@ export default function HomePage() {
           <Button
             type="primary"
             size="large"
-            onClick={handleResume}
+            onClick={() => { loadFromCache(); setShowResumeModal(false); navigate('/test'); }}
             className="!flex-1 !h-12 !rounded-xl !font-bold"
             style={{ background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none' }}
           >
-            继续上次答题
+            继续上次
           </Button>
           <Button
             size="large"
-            onClick={handleNewTest}
+            onClick={() => { clearCache(); setShowResumeModal(false); navigate('/intro'); }}
             className="!flex-1 !h-12 !rounded-xl !font-medium"
           >
             重新开始
