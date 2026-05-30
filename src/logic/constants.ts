@@ -50,6 +50,7 @@ export interface TypeMeta {
 
 interface TypeData {
   tag: string;
+  tagEn: string;
   color: string;
   description: string;
   descriptionEn: string;
@@ -65,7 +66,7 @@ interface TypeData {
 
 const TYPE_DATA: Record<string, TypeData> = {
   INTJ: {
-    tag: '战略建筑师', color: '#1a365d',
+    tag: '战略建筑师', tagEn: 'The Architect', color: '#1a365d',
     description: '你拥有强大的系统思维和长远规划能力，善于制定策略并坚定执行。你享受深度思考，对复杂问题有天然的洞察力，独立且自律，在追求目标的路上从不轻言放弃。',
     descriptionEn: 'You possess powerful systems thinking and long-term planning abilities, excelling at crafting strategies and executing them with determination. You enjoy deep thinking, have a natural insight into complex problems, and are independent and self-disciplined.',
     dimensions: '内倾 · 直觉 · 思考 · 判断',
@@ -78,7 +79,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Scientist, Engineer, Strategy Consultant, Lawyer, Architect',
   },
   INTP: {
-    tag: '逻辑探索者', color: '#1e3a5f',
+    tag: '逻辑探索者', tagEn: 'The Logician', color: '#1e3a5f',
     description: '你拥有旺盛的求知欲和卓越的逻辑分析能力，热衷于探索事物背后的原理。你思维灵活开放，善于从不同角度审视问题，享受智力挑战带来的乐趣。',
     descriptionEn: 'You have an intense curiosity and exceptional logical analysis skills, passionate about exploring the principles behind things. Your thinking is flexible and open, and you enjoy examining problems from different angles.',
     dimensions: '内倾 · 直觉 · 思考 · 感知',
@@ -91,7 +92,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Programmer, Mathematician, Philosopher, Data Analyst, Researcher',
   },
   ENTJ: {
-    tag: '果断指挥官', color: '#153e75',
+    tag: '果断指挥官', tagEn: 'The Commander', color: '#153e75',
     description: '你天生具备领导魅力，善于制定宏伟蓝图并高效组织资源实现目标。你决策果断、行动力强，在复杂局面中能迅速抓住重点，带领团队走向成功。',
     descriptionEn: 'You possess natural leadership charisma, excelling at creating bold visions and efficiently organizing resources to achieve goals. You make decisive calls and act quickly, leading teams to success in complex situations.',
     dimensions: '外倾 · 直觉 · 思考 · 判断',
@@ -104,7 +105,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'CEO, Entrepreneur, Management Consultant, Judge, Investment Banker',
   },
   ENTP: {
-    tag: '创新辩论家', color: '#2a4365',
+    tag: '创新辩论家', tagEn: 'The Debater', color: '#2a4365',
     description: '你思维敏捷、创意无限，善于发现问题并快速提出创新解决方案。你享受思想碰撞的过程，口才出众，对新事物保持高度好奇心，是天然的机会发现者。',
     descriptionEn: 'You are quick-witted and endlessly creative, skilled at spotting problems and proposing innovative solutions. You enjoy intellectual sparring, have excellent debating skills, and maintain a keen curiosity for new things.',
     dimensions: '外倾 · 直觉 · 思考 · 感知',
@@ -117,7 +118,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Entrepreneur, Product Manager, Lawyer, Journalist, Creative Director',
   },
   INFJ: {
-    tag: '心灵引路人', color: '#276749',
+    tag: '心灵引路人', tagEn: 'The Advocate', color: '#276749',
     description: '你拥有深刻的洞察力和强烈的同理心，善于理解他人内心世界。你怀抱理想主义，致力于让世界变得更美好，是安静而坚定的变革推动者。',
     descriptionEn: 'You have profound insight and strong empathy, skilled at understanding the inner worlds of others. You carry idealism and are committed to making the world better — a quiet yet determined change-maker.',
     dimensions: '内倾 · 直觉 · 情感 · 判断',
@@ -130,7 +131,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Counselor, Writer, Educator, Non-profit Leader',
   },
   INFP: {
-    tag: '理想主义诗人', color: '#2f855a',
+    tag: '理想主义诗人', tagEn: 'The Mediator', color: '#2f855a',
     description: '你内心充盈着丰富的价值观和坚定的信念，追求真实与意义。你拥有强大的共情能力和创造力，用独特的视角感受世界，是温和而执着的梦想家。',
     descriptionEn: 'Your heart is filled with rich values and firm beliefs, always pursuing authenticity and meaning. You have strong empathy and creativity, perceiving the world through a unique lens — a gentle yet persistent dreamer.',
     dimensions: '内倾 · 直觉 · 情感 · 感知',
@@ -143,7 +144,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Writer, Designer, Counselor, Artist, Social Worker',
   },
   ENFJ: {
-    tag: '魅力引导者', color: '#22543d',
+    tag: '魅力引导者', tagEn: 'The Protagonist', color: '#22543d',
     description: '你天生善于感知他人的需求与潜力，是富有感召力的引导者。你善于凝聚人心、激发团队热情，在帮助他人成长的过程中获得最大的成就感。',
     descriptionEn: 'You are naturally attuned to the needs and potential of others — an inspiring guide. You excel at bringing people together and igniting team passion, finding fulfillment in helping others grow.',
     dimensions: '外倾 · 直觉 · 情感 · 判断',
@@ -156,7 +157,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Teacher, HR, Trainer, Politician, Customer Success Manager',
   },
   ENFP: {
-    tag: '热情梦想家', color: '#38a169',
+    tag: '热情梦想家', tagEn: 'The Campaigner', color: '#38a169',
     description: '你充满热情与创造力，总是看到生活中的无限可能性。你善于与人建立深度连接，用乐观和真诚感染身边的人，是自由奔放的灵魂探索者。',
     descriptionEn: 'You are full of passion and creativity, always seeing infinite possibilities in life. You excel at building deep connections and inspire others with your optimism and sincerity — a free-spirited explorer.',
     dimensions: '外倾 · 直觉 · 情感 · 感知',
@@ -169,7 +170,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Journalist, Actor, Marketing, PR, Startup Mentor',
   },
   ISTJ: {
-    tag: '可靠守护者', color: '#2d3748',
+    tag: '可靠守护者', tagEn: 'The Logistician', color: '#2d3748',
     description: '你务实可靠、一丝不苟，是团队中最值得信赖的中坚力量。你重视规则与秩序，做事有条不紊，用实际行动兑现每一个承诺。',
     descriptionEn: 'You are practical, reliable, and meticulous — the most trustworthy backbone of any team. You value rules and order, work methodically, and deliver on every promise with concrete actions.',
     dimensions: '内倾 · 实感 · 思考 · 判断',
@@ -182,7 +183,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Accountant, Auditor, Military Officer, Civil Servant, Project Manager',
   },
   ISFJ: {
-    tag: '温暖守护者', color: '#4a5568',
+    tag: '温暖守护者', tagEn: 'The Defender', color: '#4a5568',
     description: '你温柔细腻、默默付出，用行动守护身边每一个人。你注重细节、责任感强，在安静中展现着坚不可摧的力量，是人群中最温暖的后盾。',
     descriptionEn: 'You are gentle, caring, and quietly devoted, protecting everyone around you through action. Detail-oriented and deeply responsible, you demonstrate unshakeable strength in quiet ways.',
     dimensions: '内倾 · 实感 · 情感 · 判断',
@@ -195,7 +196,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Nurse, Teacher, Admin Manager, Social Worker, Customer Service',
   },
   ESTJ: {
-    tag: '高效管理者', color: '#1a202c',
+    tag: '高效管理者', tagEn: 'The Executive', color: '#1a202c',
     description: '你是天生的组织者，善于制定清晰的目标并有条不紊地推进执行。你注重效率与结果，在管理和统筹方面展现出色才能，是团队不可或缺的支柱。',
     descriptionEn: 'You are a natural organizer, skilled at setting clear goals and driving execution methodically. You focus on efficiency and results, demonstrating outstanding management and coordination abilities.',
     dimensions: '外倾 · 实感 · 思考 · 判断',
@@ -208,7 +209,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Manager, Military Officer, Judge, Auditor, Operations Director',
   },
   ESFJ: {
-    tag: '贴心协调者', color: '#2d3748',
+    tag: '贴心协调者', tagEn: 'The Consul', color: '#2d3748',
     description: '你热情周到、善于照顾他人感受，是维护和谐氛围的大师。你重视人际关系，乐于为他人提供实际帮助，在服务他人的过程中找到自己的价值。',
     descriptionEn: 'You are warm, considerate, and skilled at caring for others feelings — a master of maintaining harmony. You value relationships and find meaning in providing practical help to others.',
     dimensions: '外倾 · 实感 · 情感 · 判断',
@@ -221,7 +222,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Doctor, Teacher, Sales Manager, Event Planner, Hotel Management',
   },
   ISTP: {
-    tag: '冷静实干家', color: '#9c4221',
+    tag: '冷静实干家', tagEn: 'The Virtuoso', color: '#9c4221',
     description: '你冷静理性、动手能力强，善于在关键时刻快速分析问题并付诸行动。你享受动手实践带来的成就感，在危机中反而能展现出超乎寻常的沉着。',
     descriptionEn: 'You are calm, rational, and hands-on — skilled at quickly analyzing problems and taking action in critical moments. You enjoy the satisfaction of practical work and become remarkably composed in crises.',
     dimensions: '内倾 · 实感 · 思考 · 感知',
@@ -234,7 +235,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Engineer, Pilot, Surgeon, Firefighter, Mechanic',
   },
   ISFP: {
-    tag: '细腻艺术家', color: '#c05621',
+    tag: '细腻艺术家', tagEn: 'The Artist', color: '#c05621',
     description: '你拥有敏锐的审美感知和丰富的内心世界，用独特的方式体验和表达美。你温和谦逊、活在当下，在安静中蕴藏着惊人的创造力和对生活真挚的热爱。',
     descriptionEn: 'You have a keen aesthetic sense and a rich inner world, experiencing and expressing beauty in unique ways. Gentle and humble, you live in the moment, harboring amazing creativity and genuine love for life.',
     dimensions: '内倾 · 实感 · 情感 · 感知',
@@ -247,7 +248,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Designer, Photographer, Musician, Florist, Food Critic',
   },
   ESTP: {
-    tag: '敏锐行动派', color: '#dd6b20',
+    tag: '敏锐行动派', tagEn: 'The Entrepreneur', color: '#dd6b20',
     description: '你精力充沛、行动力极强，善于把握当下机会快速出手。你现实敏锐、临场应变能力出众，是天生的危机处理专家和在瞬息万变中抢占先机的人。',
     descriptionEn: 'You are energetic and action-oriented, skilled at seizing the moment and moving fast. You are sharp, practical, and excel at on-the-spot improvisation — a natural crisis handler who thrives in fast-changing environments.',
     dimensions: '外倾 · 实感 · 思考 · 感知',
@@ -260,7 +261,7 @@ const TYPE_DATA: Record<string, TypeData> = {
     careersEn: 'Sales Director, ER Doctor, Athlete, Entrepreneur, Fire Chief',
   },
   ESFP: {
-    tag: '快乐表演家', color: '#ed8936',
+    tag: '快乐表演家', tagEn: 'The Entertainer', color: '#ed8936',
     description: '你天生是人群中的开心果，用热情和幽默感染每一个身边的人。你热爱生活、享受当下，善于发现生活中的美好瞬间，是轻松愉快的能量供给站。',
     descriptionEn: 'You are the life of the party, spreading warmth and humor to everyone around you. You love life, live in the moment, and have a gift for discovering joy in everyday moments — an energetic source of fun and positivity.',
     dimensions: '外倾 · 实感 · 情感 · 感知',
@@ -280,7 +281,7 @@ export function getTypeMeta(type: string, lang?: 'zh' | 'en'): TypeMeta {
   const isEn = lang === 'en';
   return {
     type,
-    tag: data.tag,
+    tag: isEn ? data.tagEn : data.tag,
     color: data.color,
     description: isEn ? data.descriptionEn : data.description,
     dimensions: isEn ? data.dimensionsEn : data.dimensions,
