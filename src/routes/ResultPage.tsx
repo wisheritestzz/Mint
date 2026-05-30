@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography, Card, Divider, message } from 'antd';
+import { Button, Typography, Card, Divider, message, Spin } from 'antd';
 import {
   ReloadOutlined,
   DownloadOutlined,
@@ -10,11 +10,9 @@ import {
   CameraOutlined,
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
-import ReactECharts from 'echarts-for-react';
 import { useResultStore } from '../store/resultStore';
 import { useTestStore } from '../store/testStore';
 import { useIsMobile } from '../hooks/useResponsive';
-import { useScreenshot } from '../hooks/useScreenshot';
 import { useI18n } from '../i18n/context';
 import {
   getDimLabel,
@@ -22,7 +20,8 @@ import {
   getDimInterpretation,
   getTypeMeta,
 } from '../logic/constants';
-import { jsPDF } from 'jspdf';
+
+const LazyChart = lazy(() => import('echarts-for-react'));
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -30,7 +29,6 @@ export default function ResultPage() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { t, lang } = useI18n();
-  const { capture } = useScreenshot();
   const resultRef = useRef<HTMLDivElement>(null);
 
   const currentResult = useResultStore((s) => s.currentResult);
@@ -123,12 +121,13 @@ export default function ResultPage() {
     ],
   };
 
-  // 截图分享
+  // 截图（动态加载 html2canvas）
   const handleScreenshot = async () => {
     if (!resultRef.current) return;
     try {
-      const dataUrl = await capture(resultRef.current);
-      // 创建临时链接用于下载
+      const { default: html2canvas } = await import('html2canvas');
+      const canvas = await html2canvas(resultRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const dataUrl = canvas.toDataURL('image/png');
       const link = document.createElement('a');
       link.href = dataUrl;
       link.download = `MBTI-${currentResult.type}-${Date.now()}.png`;
@@ -139,11 +138,16 @@ export default function ResultPage() {
     }
   };
 
-  // PDF 下载（用截图方式避免中文字体问题）
+  // PDF 下载（动态加载 html2canvas + jsPDF）
   const handlePDF = async () => {
     if (!resultRef.current) return;
     try {
-      const dataUrl = await capture(resultRef.current);
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ]);
+      const canvas = await html2canvas(resultRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const dataUrl = canvas.toDataURL('image/png');
 
       // 加载截图到 Image 对象以获取原始尺寸
       const img = new Image();
@@ -367,11 +371,13 @@ export default function ResultPage() {
 
             {/* ECharts 横向对比图 */}
             <Text className="!text-xs !text-slate-400 block !mb-2">{t('result.chartTitle')}</Text>
-            <ReactECharts
-              option={chartOption}
-              style={{ height: isMobile ? 140 : 180 }}
-              opts={{ renderer: 'svg' }}
-            />
+            <Suspense fallback={<div className="flex items-center justify-center" style={{ height: isMobile ? 140 : 180 }}><Spin size="small" /></div>}>
+              <LazyChart
+                option={chartOption}
+                style={{ height: isMobile ? 140 : 180 }}
+                opts={{ renderer: 'svg' }}
+              />
+            </Suspense>
           </Card>
         </motion.div>
 
