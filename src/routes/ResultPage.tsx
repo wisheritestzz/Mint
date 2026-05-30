@@ -247,33 +247,129 @@ export default function ResultPage() {
           </div>
         </motion.div>
 
-        {/* 维度得分图表 */}
+        {/* 可信度标识 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
+          className="text-center mb-4"
+        >
+          {(() => {
+            const clearCount = currentResult.dimensionScores.filter((ds) => !ds.ambiguous).length;
+            if (clearCount === 4) {
+              return (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  四个维度倾向明确 · 结果可信度高
+                </span>
+              );
+            } else if (clearCount >= 2) {
+              return (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
+                  <span className="w-2 h-2 rounded-full bg-blue-500" />
+                  {4 - clearCount}个维度倾向较平衡 · 大部分指标明确
+                </span>
+              );
+            } else {
+              return (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 text-xs font-medium border border-amber-100">
+                  <span className="w-2 h-2 rounded-full bg-amber-500" />
+                  多个维度倾向接近 · 建议重新测试确认
+                </span>
+              );
+            }
+          })()}
+        </motion.div>
+
+        {/* 维度得分图表 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.5 }}
         >
           <Card className="!rounded-2xl !border !border-slate-100 !shadow-sm !mb-6">
-            <Text className="!font-semibold !text-[#1a1a2e] !text-sm sm:!text-base block !mb-3">
-              维度得分
-            </Text>
+            <div className="flex items-center justify-between mb-3">
+              <Text className="!font-semibold !text-[#1a1a2e] !text-sm sm:!text-base">
+                四维度得分明细
+              </Text>
+              <Text className="!text-xs !text-slate-400">
+                满分 {currentResult.dimensionScores[0].leftScore + currentResult.dimensionScores[0].rightScore} 分/维度
+              </Text>
+            </div>
+
+            {/* 用 Ant Design Progress 展示每个维度的得分对比 */}
+            <div className="space-y-3 mb-4">
+              {currentResult.dimensionScores.map((ds) => {
+                const total = ds.leftScore + ds.rightScore;
+                const leftPct = Math.round((ds.leftScore / total) * 100);
+                const margin = Math.abs(ds.leftScore - ds.rightScore);
+                const maxPole = ds.leftScore >= ds.rightScore ? ds.leftPole : ds.rightPole;
+
+                return (
+                  <div key={ds.dimension}>
+                    <div className="flex items-center justify-between mb-1">
+                      <Text className="!text-xs !font-medium !text-slate-600">
+                        {DIMENSION_LABELS[ds.dimension]}
+                      </Text>
+                      <Text className={`!text-xs !font-medium ${ds.ambiguous ? '!text-amber-500' : '!text-emerald-600'}`}>
+                        {POLE_LABELS[maxPole].split(' ')[0]} 倾向
+                        {ds.ambiguous ? ' (不明显)' : ''}
+                        <span className="ml-1 text-slate-400">差值{margin}分</span>
+                      </Text>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Text className="!text-xs !text-slate-400 !w-6 text-right !flex-shrink-0">
+                        {POLE_LABELS[ds.leftPole].split(' ')[0]}
+                      </Text>
+                      <div className="flex-1 h-4 bg-slate-100 rounded-full overflow-hidden flex">
+                        <div
+                          className="h-full transition-all duration-700"
+                          style={{
+                            width: `${leftPct}%`,
+                            background: leftPct >= 50
+                              ? `linear-gradient(90deg, ${currentResult.color}cc, ${currentResult.color})`
+                              : '#cbd5e1',
+                            borderRadius: leftPct > 50 ? '9999px 0 0 9999px' : '9999px',
+                          }}
+                        />
+                        <div
+                          className="h-full transition-all duration-700"
+                          style={{
+                            width: `${100 - leftPct}%`,
+                            background: leftPct < 50
+                              ? `linear-gradient(90deg, ${currentResult.color}, ${currentResult.color}cc)`
+                              : '#e2e8f0',
+                            borderRadius: leftPct < 50 ? '0 9999px 9999px 0' : '9999px',
+                          }}
+                        />
+                      </div>
+                      <Text className="!text-xs !text-slate-400 !w-6 !flex-shrink-0">
+                        {POLE_LABELS[ds.rightPole].split(' ')[0]}
+                      </Text>
+                    </div>
+                    <div className="flex justify-between mt-1">
+                      <Text className="!text-[10px] !text-slate-400">{ds.leftScore}分</Text>
+                      <div
+                        className="w-px h-3"
+                        style={{
+                          marginLeft: `${leftPct}%`,
+                          background: ds.ambiguous ? '#f59e0b' : '#10b981',
+                        }}
+                      />
+                      <Text className="!text-[10px] !text-slate-400">{ds.rightScore}分</Text>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* ECharts 横向对比图 */}
+            <Text className="!text-xs !text-slate-400 block !mb-2">可视化对比</Text>
             <ReactECharts
               option={chartOption}
-              style={{ height: isMobile ? 160 : 200 }}
+              style={{ height: isMobile ? 140 : 180 }}
               opts={{ renderer: 'svg' }}
             />
-            {/* 倾向不明显标记 */}
-            {currentResult.dimensionScores.some((ds) => ds.ambiguous) && (
-              <div className="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-100">
-                <Text className="!text-xs !text-amber-700">
-                  {currentResult.dimensionScores
-                    .filter((ds) => ds.ambiguous)
-                    .map((ds) => DIMENSION_LABELS[ds.dimension])
-                    .join('、')}
-                  {' '}维度倾向不明显，这表明你在该维度上的偏好较为灵活和平衡。
-                </Text>
-              </div>
-            )}
           </Card>
         </motion.div>
 

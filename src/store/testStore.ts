@@ -17,6 +17,7 @@ interface TestState {
   setAnswer: (questionId: number, score: LikertLevel) => void;
   next: () => void;
   prev: () => void;
+  goTo: (index: number) => void;
   isComplete: () => boolean;
   getProgress: () => number;
 
@@ -66,6 +67,12 @@ export const useTestStore = create<TestState>((set, get) => ({
   prev: () => {
     set((state) => ({
       currentIndex: Math.max(state.currentIndex - 1, 0),
+    }));
+  },
+
+  goTo: (index) => {
+    set((state) => ({
+      currentIndex: Math.max(0, Math.min(index, state.questions.length - 1)),
     }));
   },
 
