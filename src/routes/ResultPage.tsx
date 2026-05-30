@@ -15,6 +15,7 @@ import { useResultStore } from '../store/resultStore';
 import { useTestStore } from '../store/testStore';
 import { useIsMobile } from '../hooks/useResponsive';
 import { useScreenshot } from '../hooks/useScreenshot';
+import { useI18n } from '../i18n/context';
 import {
   DIMENSION_LABELS,
   POLE_LABELS,
@@ -28,6 +29,7 @@ const { Title, Text, Paragraph } = Typography;
 export default function ResultPage() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { t } = useI18n();
   const { capture } = useScreenshot();
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -131,9 +133,9 @@ export default function ResultPage() {
       link.href = dataUrl;
       link.download = `MBTI-${currentResult.type}-${Date.now()}.png`;
       link.click();
-      message.success('截图已保存');
+      message.success(t('result.screenshotOk'));
     } catch {
-      message.error('截图失败，请重试');
+      message.error(t('result.pdfFail'));
     }
   };
 
@@ -185,16 +187,16 @@ export default function ResultPage() {
         pdf.addImage(sliceDataUrl, 'PNG', margin, margin, pdfImgW, slicePdfH);
       }
 
-      pdf.save(`MBTI-${currentResult.type}-测试报告.pdf`);
-      message.success('PDF报告已下载');
+      pdf.save(`MBTI-${currentResult.type}-${currentResult.tag}.pdf`);
+      message.success(t('result.pdfOk'));
     } catch {
-      message.error('PDF生成失败，请重试');
+      message.error(t('result.pdfFail'));
     }
   };
 
   // 分享
   const handleShare = async () => {
-    const shareText = `我在MBTI测试中获得了 ${currentResult.type}（${currentResult.tag}）！来看看你是什么类型吧～`;
+    const shareText = `${t('result.shareMsg')} ${currentResult.type}（${currentResult.tag}）！${t('result.shareMsg2')}`;
     if (navigator.share) {
       try {
         await navigator.share({ title: 'MBTI性格测试', text: shareText, url: window.location.origin });
@@ -203,7 +205,7 @@ export default function ResultPage() {
       }
     } else {
       await navigator.clipboard.writeText(shareText);
-      message.success('分享文案已复制到剪贴板');
+      message.success(t('result.shareCopied'));
     }
   };
 
@@ -260,21 +262,21 @@ export default function ResultPage() {
               return (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">
                   <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  四个维度倾向明确 · 结果可信度高
+                  {t('result.confHigh')}
                 </span>
               );
             } else if (clearCount >= 2) {
               return (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
                   <span className="w-2 h-2 rounded-full bg-blue-500" />
-                  {4 - clearCount}个维度倾向较平衡 · 大部分指标明确
+                  {4 - clearCount}{t('result.confMid')}
                 </span>
               );
             } else {
               return (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 text-xs font-medium border border-amber-100">
                   <span className="w-2 h-2 rounded-full bg-amber-500" />
-                  多个维度倾向接近 · 建议重新测试确认
+                  {t('result.confLow')}
                 </span>
               );
             }
@@ -290,10 +292,10 @@ export default function ResultPage() {
           <Card className="!rounded-2xl !border !border-slate-100 !shadow-sm !mb-6">
             <div className="flex items-center justify-between mb-3">
               <Text className="!font-semibold !text-[#1a1a2e] !text-sm sm:!text-base">
-                四维度得分明细
+                {t('result.scoreTitle')}
               </Text>
               <Text className="!text-xs !text-slate-400">
-                满分 {currentResult.dimensionScores[0].leftScore + currentResult.dimensionScores[0].rightScore} 分/维度
+                {t('result.scoreMax')} {currentResult.dimensionScores[0].leftScore + currentResult.dimensionScores[0].rightScore} {t('result.scorePerDim')}
               </Text>
             </div>
 
@@ -312,9 +314,9 @@ export default function ResultPage() {
                         {DIMENSION_LABELS[ds.dimension]}
                       </Text>
                       <Text className={`!text-xs !font-medium ${ds.ambiguous ? '!text-amber-500' : '!text-emerald-600'}`}>
-                        {POLE_LABELS[maxPole].split(' ')[0]} 倾向
-                        {ds.ambiguous ? ' (不明显)' : ''}
-                        <span className="ml-1 text-slate-400">差值{margin}分</span>
+                        {POLE_LABELS[maxPole].split(' ')[0]} {t('result.poleLean')}
+                        {ds.ambiguous ? ` (${t('result.poleAmbiguous')})` : ''}
+                        <span className="ml-1 text-slate-400">{t('result.scoreDiff')}{margin}{t('result.scoreUnit')}</span>
                       </Text>
                     </div>
                     <div className="flex items-center gap-2">
@@ -364,7 +366,7 @@ export default function ResultPage() {
             </div>
 
             {/* ECharts 横向对比图 */}
-            <Text className="!text-xs !text-slate-400 block !mb-2">可视化对比</Text>
+            <Text className="!text-xs !text-slate-400 block !mb-2">{t('result.chartTitle')}</Text>
             <ReactECharts
               option={chartOption}
               style={{ height: isMobile ? 140 : 180 }}
@@ -381,7 +383,7 @@ export default function ResultPage() {
         >
           <Card className="!rounded-2xl !border !border-slate-100 !shadow-sm !mb-6">
             <Text className="!font-semibold !text-[#1a1a2e] !text-sm sm:!text-base block !mb-3">
-              人格解读
+              {t('result.interpretTitle')}
             </Text>
             <Paragraph className="!text-sm !text-slate-600 !leading-relaxed !mb-4">
               {meta.description}
@@ -397,7 +399,7 @@ export default function ResultPage() {
         >
           <Card className="!rounded-2xl !border !border-slate-100 !shadow-sm !mb-6">
             <Text className="!font-semibold !text-[#1a1a2e] !text-sm sm:!text-base block !mb-4">
-              详细维度解读
+              {t('result.detailTitle')}
             </Text>
             {currentResult.dimensionScores.map((ds) => (
               <div key={ds.dimension} className="mb-4 last:mb-0">
@@ -429,28 +431,14 @@ export default function ResultPage() {
             transition={{ delay: 1 }}
           >
             <Card className="!rounded-2xl !border !border-slate-100 !shadow-sm !mb-6 !bg-slate-50">
-              <Text className="!text-sm !text-slate-500 block !mb-3 !text-center">
-                这个结果是否符合你的认知？
-              </Text>
+              <Text className="!text-sm !text-slate-500 block !mb-3 !text-center">{t('result.feedback')}</Text>
               <div className="flex gap-3 justify-center">
                 <Button
-                  onClick={() => {
-                    message.success('感谢反馈！我们会持续优化测试精准度');
-                    setShowFeedback(false);
-                  }}
-                  className="!rounded-xl !font-medium"
-                >
-                  符合
-                </Button>
+                  onClick={() => { message.success(t('result.feedbackThanks')); setShowFeedback(false); }}
+                  className="!rounded-xl !font-medium">{t('result.feedbackYes')}</Button>
                 <Button
-                  onClick={() => {
-                    message.info('感谢反馈！我们会根据反馈持续优化评分逻辑');
-                    setShowFeedback(false);
-                  }}
-                  className="!rounded-xl !font-medium"
-                >
-                  不太符合
-                </Button>
+                  onClick={() => { message.info(t('result.feedbackThanksNo')); setShowFeedback(false); }}
+                  className="!rounded-xl !font-medium">{t('result.feedbackNo')}</Button>
               </div>
             </Card>
           </motion.div>
@@ -464,59 +452,17 @@ export default function ResultPage() {
           className="space-y-3 mb-8"
         >
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <Button
-              icon={<ShareAltOutlined />}
-              onClick={handleShare}
-              className="!rounded-xl !font-medium !h-12"
-            >
-              分享
-            </Button>
-            <Button
-              icon={<CameraOutlined />}
-              onClick={handleScreenshot}
-              className="!rounded-xl !font-medium !h-12"
-            >
-              截图
-            </Button>
-            <Button
-              icon={<DownloadOutlined />}
-              onClick={handlePDF}
-              className="!rounded-xl !font-medium !h-12"
-            >
-              PDF
-            </Button>
-            <Button
-              icon={<HistoryOutlined />}
-              onClick={() => setShowHistory(!showHistory)}
-              className="!rounded-xl !font-medium !h-12"
-            >
-              历史
-            </Button>
+            <Button icon={<ShareAltOutlined />} onClick={handleShare} className="!rounded-xl !font-medium !h-12">{t('result.share')}</Button>
+            <Button icon={<CameraOutlined />} onClick={handleScreenshot} className="!rounded-xl !font-medium !h-12">{t('result.screenshot')}</Button>
+            <Button icon={<DownloadOutlined />} onClick={handlePDF} className="!rounded-xl !font-medium !h-12">{t('result.pdf')}</Button>
+            <Button icon={<HistoryOutlined />} onClick={() => setShowHistory(!showHistory)} className="!rounded-xl !font-medium !h-12">{t('result.history')}</Button>
           </div>
 
-          <Button
-            type="primary"
-            size="large"
-            icon={<ReloadOutlined />}
-            onClick={handleRetry}
-            block
+          <Button type="primary" size="large" icon={<ReloadOutlined />} onClick={handleRetry} block
             className="!h-14 !text-lg !font-bold !rounded-2xl !shadow-lg !shadow-indigo-300/50"
-            style={{
-              background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-              border: 'none',
-            }}
-          >
-            重新测试
-          </Button>
-
-          <Button
-            icon={<HomeOutlined />}
-            onClick={() => navigate('/')}
-            block
-            className="!h-12 !rounded-2xl !text-slate-500 !font-medium"
-          >
-            返回首页
-          </Button>
+            style={{ background: 'linear-gradient(135deg, #6366f1, #4f46e5)', border: 'none' }}>{t('result.retry')}</Button>
+          <Button icon={<HomeOutlined />} onClick={() => navigate('/')} block
+            className="!h-12 !rounded-2xl !text-slate-500 !font-medium">{t('result.home')}</Button>
         </motion.div>
 
         {/* 历史记录 */}
@@ -526,11 +472,11 @@ export default function ResultPage() {
             animate={{ opacity: 1, height: 'auto' }}
           >
             <Card
-              title="最近测试记录"
+              title={t('result.historyTitle')}
               className="!rounded-2xl !border !border-slate-100 !shadow-sm !mb-6"
             >
               {history.length === 0 ? (
-                <Text className="!text-sm !text-slate-400">暂无历史记录</Text>
+                <Text className="!text-sm !text-slate-400">{t('result.historyEmpty')}</Text>
               ) : (
                 <div className="space-y-2">
                   {history.map((h) => (
